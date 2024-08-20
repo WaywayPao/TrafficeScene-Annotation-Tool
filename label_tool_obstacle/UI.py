@@ -22,22 +22,6 @@ class Ui_MainWindow(object):
         # self.image_label.setGeometry(QtCore.QRect(0, 0, 1280, 720))
         self.image_label.setObjectName("image_label")
 
-        ######################################################################
-        # self.scroll_area = QtWidgets.QScrollArea(self.centralwidget)
-        # self.scroll_area.setGeometry(QtCore.QRect(384, 104, 520, 520))
-        # self.scroll_area.setObjectName("scroll_area")
-        # self.scroll_area.setWidget(self.image_label)
-        # self.scroll_area.setWidgetResizable(True)
-
-        # self.zoom_in = QtWidgets.QPushButton('Zoom in', self.centralwidget)
-        # self.zoom_in.setGeometry(QtCore.QRect(384, 640, 120, 60))
-        # self.zoom_out = QtWidgets.QPushButton('Zoom out', self.centralwidget)
-        # self.zoom_out.setGeometry(QtCore.QRect(584, 640, 120, 60))
-        # self.recover = QtWidgets.QPushButton('recover', self.centralwidget)
-        # self.recover.setGeometry(QtCore.QRect(784, 640, 120, 60))
-
-        ######################################################################
-
         self.image_label2 = QtWidgets.QLabel(self.centralwidget)
         self.image_label2.setGeometry(QtCore.QRect(1280, 0, 640, 360))
         self.image_label2.setObjectName("image_label2")
@@ -57,21 +41,6 @@ class Ui_MainWindow(object):
         font.setPointSize(13)
         self.label_framecnt.setFont(font)
         self.label_framecnt.setObjectName("label_framecnt")
-
-        # self.button_play = QtWidgets.QPushButton(self.centralwidget)
-        # self.button_play.setGeometry(QtCore.QRect(880, 725, 80, 40))
-        # font = QtGui.QFont()
-        # font.setPointSize(13)
-        # self.button_play.setFont(font)
-        # self.button_play.setObjectName("button_play")
-
-        # self.button_pause = QtWidgets.QPushButton(self.centralwidget)
-        # self.button_pause.setGeometry(QtCore.QRect(980, 725, 80, 40))
-        # font = QtGui.QFont()
-        # font.setPointSize(13)
-        # self.button_pause.setFont(font)
-        # self.button_pause.setMouseTracking(False)
-        # self.button_pause.setObjectName("button_pause")
 
         self.message_box = QtWidgets.QLabel(self.centralwidget)
         self.message_box.setGeometry(QtCore.QRect(1300, 1020, 600, 30))

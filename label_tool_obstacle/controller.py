@@ -1,17 +1,13 @@
-from enum import auto
-import shutil
-from PyQt5 import QtCore
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QLabel
-# from PyQt5.QtCore import QThread, pyqtSignal
-from PyQt5.QtCore import Qt
+from opencv_engine import opencv_engine
+from UI import Ui_MainWindow
 import numpy as np
 import os
-from UI import Ui_MainWindow
-from opencv_engine import opencv_engine
+import shutil
 import cv2
 import json
-import time
 from projection import Projection, pixel_to_world, draw_image, pixel_to_carla, carla_to_pixel
 
 
@@ -25,16 +21,13 @@ class MainWindow_controller(QMainWindow):
         self.init_frame_combobox = False
         self.trigger_button = False
 
-        self.root = '/media/waywaybao_cs10/DATASET/RiskBench_Dataset/'
+        self.root =f"RiskBench_Dataset"
 
-        data_type_list = ["interactive", "non-interactive",
-                          "collision", "obstacle"][3:]
+        data_type_list = ["obstacle"]
 
         self.ui.combobox_data_type.clear()
         for i in range(len(data_type_list)):
             self.ui.combobox_data_type.insertItem(i, data_type_list[i])
-        #basic_scenario_list = os.listdir('../dataset')
-        #self.current_data_type = self.ui.combobox_data_type.currentText()
 
         self.img_width = 1280
         self.img_height = 720
@@ -59,10 +52,6 @@ class MainWindow_controller(QMainWindow):
         self.ui.combobox_frameNum.currentIndexChanged.connect(
             self.variant_action)
 
-        # self.ui.zoom_in.clicked.connect(self.zoom_in)
-        # self.ui.zoom_out.clicked.connect(self.zoom_out)
-        # self.ui.recover.clicked.connect(self.recover)
-
         self.ui.slider_videoframe.valueChanged.connect(self.getslidervalue)
 
         self.ui.nextButton_basic.clicked.connect(self.set_next_basic_index)
@@ -83,24 +72,6 @@ class MainWindow_controller(QMainWindow):
         self.ui.pushButton_clear.clicked.connect(self.clearPoints)
         self.ui.pushButton_save.clicked.connect(self.save_img)
         self.ui.auto_label.clicked.connect(self.auto_label)
-
-    # def zoom_in(self):
-    #     self.qpixmap_main_height += 20
-    #     self.qpixmap_main_width += 20
-    #     self.set_image(self.updated_top_img, self.ui.image_label, scale=True, scale_size=(
-    #         self.qpixmap_main_height, self.qpixmap_main_width))
-
-    # def zoom_out(self):
-    #     self.qpixmap_main_height -= 20
-    #     self.qpixmap_main_width -= 20
-    #     self.set_image(self.updated_top_img, self.ui.image_label, scale=True, scale_size=(
-    #         self.qpixmap_main_height, self.qpixmap_main_width))
-
-    # def recover(self):
-    #     self.qpixmap_main_height = self.img_height
-    #     self.qpixmap_main_width = self.img_width
-    #     self.set_image(self.updated_top_img, self.ui.image_label, scale=True, scale_size=(
-    #         self.qpixmap_main_height, self.qpixmap_main_width))
 
     def mouse_press_event(self, event):
 
@@ -156,31 +127,6 @@ class MainWindow_controller(QMainWindow):
         if not "other_obstacle_list" in data:
             data["other_obstacle_list"] = {}
 
-
-
-        # path_top = os.path.join(path, 'top')
-        # path_rgb = os.path.join(path, 'rgb')
-        # path_seg = os.path.join(path, 'seg')
-
-        # if not os.path.isdir(path):
-        #     os.mkdir(path)
-        # if not os.path.isdir(path_top):
-        #     os.mkdir(path_top)
-        # if not os.path.isdir(path_rgb):
-        #     os.mkdir(path_rgb)
-        # if not os.path.isdir(path_seg):
-        #     os.mkdir(path_seg)
-
-        # cv2.imwrite(os.path.join(path_top, self.get_current_frame()),
-        #             self.updated_top_img)
-        # cv2.imwrite(os.path.join(path_rgb, self.get_current_frame()),
-        #             self.updated_front_img)
-        # cv2.imwrite(os.path.join(path_seg, self.get_current_frame()),
-        #             self.updated_front_seg)
-
-        # print(self.points_color)
-        # print(self.carla_points[0])
-
         for p, c in zip(self.carla_points[0], self.points_color):
             id = str(256*c[0]+c[1])
             data["other_obstacle_list"][id] = {}
@@ -224,36 +170,15 @@ class MainWindow_controller(QMainWindow):
         world_points = pixel_to_world(np.array(self.points), depth=self.z, focal_length=548.993771650447, pitch=0, center=np.array(
             (self.img_width//2, self.img_height//2)))
 
-        # # update front view rgb image
-        # projection = Projection(self.updated_front_img, np.copy(world_points))
-        # self.updated_front_img = projection.bev_to_front(
-        #     theta=-90, dx=0, dy=0, dz=0, fov=90, color=self.color)
-        # self.set_image(self.updated_front_img, self.ui.image_label3, True)
-
-        # # update front view segmentation image
-        # projection_seg = Projection(
-        #     self.updated_front_seg, np.copy(world_points))
-        # self.updated_front_seg = projection_seg.bev_to_front(
-        #     theta=-90, dx=0, dy=0, dz=0, fov=90, color=self.color, alpha=1)
-        # self.set_image(self.updated_front_seg, self.ui.image_label2, True)
-
-        # # update top view rgb image
-        # self.updated_top_img = opencv_engine.draw_line(self.updated_top_img,
-        #                                                self.points[0], self.points[-1], color=self.color)
-        # self.updated_top_img = draw_image(
-        #     self.updated_top_img, self.points, color=self.color, alpha=self.alpha)
-        # self.set_image(self.updated_top_img, self.ui.image_label, True, scale_size=(1024,1024))
-
         if self.ego_data is not False and not auto_labeling:
             compass, ego_loc = self.ego_data
             carla_point = pixel_to_carla(
                 world_points[:, :2], theta=-compass, depth=self.z, ego_loc=ego_loc)
 
             self.carla_points.append(carla_point)
-            # self.points_color.append(self.color)
         else:
-            self.ui.message_box.setText(f"No ego data!!!!!!!!!!!!!!!!!!!!!!")
-            print(f"No ego data!!!!!!!!!!!!!!!!!!!!!!")
+            self.ui.message_box.setText(f"No ego data!")
+            print(f"No ego data!")
 
         # self.points = []
         self.ui.message_box.setText(
@@ -344,7 +269,7 @@ class MainWindow_controller(QMainWindow):
                 self.ui.combobox_variant.currentIndex()+1)
 
     def set_back_frame_index(self):
-        # self.init_high_level_command()
+
         if ((self.ui.combobox_frameNum.currentIndex()-1) == -1):
             self.ui.combobox_frameNum.setCurrentIndex(
                 self.ui.combobox_frameNum.count()-1)
@@ -388,7 +313,6 @@ class MainWindow_controller(QMainWindow):
             self.ui.combobox_basic.insertItem(i, list[i])
 
         self.init_basic_combobox = False
-        # print(self.ui.combobox_basic.currentText())
 
         self.set_variant_combobox()
 
@@ -506,9 +430,6 @@ class MainWindow_controller(QMainWindow):
         if scale:
             self.qpixmap = self.qpixmap.scaled(
                 scale_size[0], scale_size[1], aspectRatioMode=Qt.KeepAspectRatio)
-
-        # if image_label is self.ui.image_label:
-        #     print("###", self.qpixmap.height(), self.qpixmap.width())
 
         image_label.setPixmap(self.qpixmap)
 

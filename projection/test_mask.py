@@ -4,7 +4,7 @@ import cv2
 
 labeled_path = 'label/top'
 data_path = 'mini_dataset/data_collection/interactive'
-save_path = 'hank_tool'     # {variant_scenario}/{weather}/{hank_tool}
+save_path = 'labedled_mask'     # {variant_scenario}/{weather}/{labedled_mask}
 view = ['front', 'left', 'right', 'lbc_img'][3]
 
 ### user optional

@@ -9,14 +9,14 @@ from utils import Projection, related_distance
 """
     variable:
         labeled_path
-            labeled data path by label_tool_hank_4k
+            labeled data path by label_tool_scenario_4k
 
         data_path
             carla dataset path
 
         save_path
             save path of the mask .npy file
-            e.g. {variant_scenario}/{weather}/{hank_tool}
+            e.g. {variant_scenario}/{weather}/{labedled_mask}
   
         view
             ego-view type, this program only supports running one view at a time
@@ -30,7 +30,7 @@ from utils import Projection, related_distance
 """
 labeled_path = 'label/top'
 data_path = 'mini_dataset/data_collection/interactive'
-save_path = 'hank_tool'
+save_path = 'labedled_mask'
 view = ['front', 'left', 'right', 'lbc_img'][3]
 verbose = True
 color_list = {'Corner': ([255, 0, 0], 0), 'Road': ([0, 255, 0], 1), 'Crosswalk': ([0, 0, 255], 2),
@@ -139,7 +139,7 @@ def save_mask(new_mask, variant_path, view, frame_id):
     """
         parameter:
             variant_path
-                save the mask to the {variant_path}/{hank_tool}/{view}
+                save the mask to the {variant_path}/{labedled_mask}/{view}
             mask
                 (NxHxW) ndarray, N is number of total instance
     """

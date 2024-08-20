@@ -1,17 +1,13 @@
-from enum import auto
-import shutil
-from PyQt5 import QtCore
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QLabel
-# from PyQt5.QtCore import QThread, pyqtSignal
-from PyQt5.QtCore import Qt
+from opencv_engine import opencv_engine
+from UI import Ui_MainWindow
 import numpy as np
 import os
-from UI import Ui_MainWindow
-from opencv_engine import opencv_engine
 import cv2
 import json
-import time
+import shutil
 from projection import Projection, pixel_to_world, draw_image, pixel_to_carla, carla_to_pixel
 
 
@@ -25,16 +21,13 @@ class MainWindow_controller(QMainWindow):
         self.init_frame_combobox = False
         self.trigger_button = False
 
-        self.root = '/media/waywaybao_cs10/DATASET/RiskBench_Dataset/'
+        self.root = f"RiskBench_Dataset"
 
-        data_type_list = ["interactive", "non-interactive",
-                          "collision", "obstacle"]
+        data_type_list = ["interactive", "non-interactive", "collision", "obstacle"]
 
         self.ui.combobox_data_type.clear()
         for i in range(len(data_type_list)):
             self.ui.combobox_data_type.insertItem(i, data_type_list[i])
-        #basic_scenario_list = os.listdir('../dataset')
-        #self.current_data_type = self.ui.combobox_data_type.currentText()
 
         self.img_width = 1280
         self.img_height = 720
@@ -59,10 +52,6 @@ class MainWindow_controller(QMainWindow):
         self.ui.combobox_frameNum.currentIndexChanged.connect(
             self.variant_action)
 
-        # self.ui.zoom_in.clicked.connect(self.zoom_in)
-        # self.ui.zoom_out.clicked.connect(self.zoom_out)
-        # self.ui.recover.clicked.connect(self.recover)
-
         self.ui.slider_videoframe.valueChanged.connect(self.getslidervalue)
 
         self.ui.nextButton_basic.clicked.connect(self.set_next_basic_index)
@@ -84,23 +73,6 @@ class MainWindow_controller(QMainWindow):
         self.ui.pushButton_save.clicked.connect(self.save_img)
         self.ui.auto_label.clicked.connect(self.auto_label)
 
-    # def zoom_in(self):
-    #     self.qpixmap_main_height += 20
-    #     self.qpixmap_main_width += 20
-    #     self.set_image(self.updated_top_img, self.ui.image_label, scale=True, scale_size=(
-    #         self.qpixmap_main_height, self.qpixmap_main_width))
-
-    # def zoom_out(self):
-    #     self.qpixmap_main_height -= 20
-    #     self.qpixmap_main_width -= 20
-    #     self.set_image(self.updated_top_img, self.ui.image_label, scale=True, scale_size=(
-    #         self.qpixmap_main_height, self.qpixmap_main_width))
-
-    # def recover(self):
-    #     self.qpixmap_main_height = self.img_height
-    #     self.qpixmap_main_width = self.img_width
-    #     self.set_image(self.updated_top_img, self.ui.image_label, scale=True, scale_size=(
-    #         self.qpixmap_main_height, self.qpixmap_main_width))
 
     def mouse_press_event(self, event):
 
@@ -481,9 +453,6 @@ class MainWindow_controller(QMainWindow):
         if scale:
             self.qpixmap = self.qpixmap.scaled(
                 scale_size[0], scale_size[1], aspectRatioMode=Qt.KeepAspectRatio)
-
-        # if image_label is self.ui.image_label:
-        #     print("###", self.qpixmap.height(), self.qpixmap.width())
 
         image_label.setPixmap(self.qpixmap)
 

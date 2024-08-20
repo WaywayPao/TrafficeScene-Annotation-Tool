@@ -1,18 +1,15 @@
-from enum import auto
-from PyQt5 import QtCore
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QLabel
-# from PyQt5.QtCore import QThread, pyqtSignal
-from PyQt5.QtCore import Qt
-import numpy as np
-import os
 from UI import Ui_MainWindow
 from opencv_engine import opencv_engine
+import numpy as np
+import os
 import cv2
 import json
-import time
-from projection import Projection, pixel_to_world, draw_image, pixel_to_carla, carla_to_pixel
 import glob
+from projection import Projection, pixel_to_world, draw_image, pixel_to_carla, carla_to_pixel
+
 
 
 class MainWindow_controller(QMainWindow):
@@ -25,18 +22,19 @@ class MainWindow_controller(QMainWindow):
         self.init_frame_combobox = False
         self.trigger_button = False
 
-        self.root = '/media/waywaybao_cs10/Disk_2/Retrieve_tool/data_collection/'
-        self.main_image_path = 'map_collection'
+        self.root = "RiskBench"
+        self.main_image_path = "map_collection"
+        self.focal_length = -1
 
-        self.current_map = '.png'
-        self.road_id = ''
+        self.current_map = ".png"
+        self.road_id = ""
         self.img_width = 1280
         self.img_height = 720
         self.z = 100
-        self.focal_length = 1097.987543300894
         self.current_color = (0, 0, 255)
         self.alpha = 0.4
         self.draw_line = True
+
         self.points = []
         self.points_by_pixel = []
         self.carla_points = []

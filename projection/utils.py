@@ -150,17 +150,11 @@ def pixel_to_world(points, pitch, depth=28.6080905795, focal_length=640, center=
                    [np.sin(gamma), np.cos(gamma), 0],
                    [0, 0, 1]])
     R = RX@RY@RZ
-    # print(R)
     points = np.append(points, np.array(
         [[focal_length]*len(points)]).reshape(-1, 1), axis=1)
-    # print(points)
 
-    # world_points = (points*depth/focal_length) * \
-    #     [1, 1/(np.sin(72*pi/180.))**2, 1]
     world_points = (points*depth/focal_length)@R.T
-    # print(world_points)
 
-    # [0, 2.31671180725, 0]
     return world_points+np.array([0, 0, 0])    # (N*3)
 
 
@@ -197,7 +191,7 @@ if __name__ == "__main__":
 
     pitch_ang = -90
     frame = "00000160.png"
-    scenario_id = "obstacle/10_s-6_1_f_sl/CloudyNoon_none_"
+    scenario_id = ""
 
     front_rgb = f"{scenario_id}/rgb/front/{frame}"
     bev_rgb = f"{scenario_id}/rgb/top/{frame}"
@@ -208,10 +202,8 @@ if __name__ == "__main__":
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-    # points = [[630, 178], [655, 178], [630, 385], [655, 385]]
     world_points = pixel_to_world(
         np.array(points), pitch=0)
-    # print(world_points)
 
     projection = Projection(front_rgb, world_points)
     projection.bev_to_front(
